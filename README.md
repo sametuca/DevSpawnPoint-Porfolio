@@ -1,6 +1,10 @@
-# React + TypeScript + Vite
+# DevSpawnPoint - 3D Interactive Portfolio
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/10a6a2f3-5ab6-4c18-bc1d-7111c2c644f3/deploy-status)](https://app.netlify.com/projects/developerspawnpoint/deploys)
+
+## About the Project
+
+DevSpawnPoint is an interactive 3D developer workspace (spawn point) portfolio built with modern web technologies. Visitors can navigate through a realistic 3D room, interact with items on the desk, and discover my projects, social media profiles, and skills in an immersive environment.
 
 ## Screenshots
 
@@ -8,78 +12,65 @@
 *Interactive 3D workspace environment*
 
 ![Screenshot 2](screenshots/screenshot-2.png)
-*Dark mode view with ambient lighting*
+*Night mode with ambient lighting*
 
-## About
+## Tech Stack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is optimized using the latest web technologies and 3D graphics libraries:
 
-Currently, two official plugins are available:
+- **Core:** [React 19](https://react.dev/) & [TypeScript](https://www.typescriptlang.org/)
+- **3D Engine:** [Three.js](https://threejs.org/)
+- **React Bridge:** [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber)
+- **3D Utilities:** [@react-three/drei](https://github.com/pmnd.rs/drei)
+- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **AI Integration:** [Google Generative AI (Gemini)](https://ai.google.dev/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Post-processing:** Bloom and Vignette effects via `@react-three/postprocessing`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Features
 
-## React Compiler
+- **Interactive 3D Environment:** 360-degree room exploration with zoom and pan capabilities.
+- **Dynamic Screens:** Desktop monitors feature dynamic digital displays showcasing projects and tech stacks.
+- **Matrix Effect:** Custom shader-based Matrix rain effect on specific terminal screens.
+- **Performance Optimization:** Seamless experience with `frameloop="demand"` and optimized DPR settings.
+- **Music & Audio:** Immersive ambient music managed through a central `MusicContext`.
+- **Gemini AI:** Artificial intelligence integration for smart content management and interactions.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Project Structure
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+src/
+├── components/
+│   ├── canvas/      # 3D Models and Scene components (Room, Desk, Monitor, etc.)
+│   ├── overlays/    # UI layers placed over the 3D scene
+│   └── ui/          # Menus, Loading screens, and Buttons
+├── context/         # Centralized state management for Overlays and Music
+├── constants/       # Project data and configurations
+├── assets/          # Static media files
+└── App.tsx          # Main entry point and R3F Canvas configuration
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To run the project locally:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sametuca/DevSpawnPoint-Porfolio.git
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Models & Assets
+
+The 3D models used in the project are located in the `public/models` directory. All models are in GLTF/GLB format and optimized for web performance. The scene consists of a desk, gaming chair, monitors, decorative items, and custom lighting setups.
+
+---
+*Developed by: [Samet Uca](https://github.com/sametuca)*
