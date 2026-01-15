@@ -1,9 +1,10 @@
-import { useGLTF, Text, Image } from '@react-three/drei'
+import { useGLTF, Text, Image, Html } from '@react-three/drei'
 import { useLoader, useFrame } from '@react-three/fiber'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import * as THREE from 'three'
 import { useMemo, useState } from 'react'
 import { useOverlay } from '../../context/OverlayContext'
+import { useMusic } from '../../context/MusicContext'
 import { DEFAULT_FONT } from '../../constants/fonts'
 
 // MacBook component with Gemini app
@@ -96,36 +97,155 @@ const XiaomiDesktopIcon = ({
 function XiaomiMonitor({ position, rotation, scale }: { position: [number, number, number], rotation: [number, number, number], scale: number }) {
     const { scene } = useGLTF('/models/xiaomi_4k_27_monitor/scene.gltf')
     const { setOverlay } = useOverlay()
+    const { musicActive, setMusicActive } = useMusic()
 
     return (
         <group position={position} rotation={rotation} scale={scale}>
             <primitive object={scene.clone()} scale={3.015} position={[0, 0.3, 0]} />
             {/* Screen Content - Desktop Icons */}
             <group position={[0, 0.3, 0.08]}>
-                <XiaomiDesktopIcon
-                    position={[-0.5, 0.15, 0]}
-                    iconUrl="/textures/logos/githublogo.png"
-                    label="GitHub"
-                    onClick={() => window.open('https://github.com/sametuca', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[-0.15, 0.15, 0]}
-                    iconUrl="/textures/logos/mediumlogo.png"
-                    label="Medium"
-                    onClick={() => window.open('https://medium.com/@sametuca', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[0.2, 0.15, 0]}
-                    iconUrl="/textures/logos/certificatelogo.png"
-                    label="Certificate"
-                    onClick={() => setOverlay('certificates')}
-                />
-                <XiaomiDesktopIcon
-                    position={[0.55, 0.15, 0]}
-                    iconUrl="/textures/logos/contactlogo.png"
-                    label="About"
-                    onClick={() => setOverlay('contact')}
-                />
+                {/* Black Background */}
+                <mesh position={[0, 0, -0.01]}>
+                    <planeGeometry args={[1.4, 0.8]} />
+                    <meshBasicMaterial color="#000000" />
+                </mesh>
+
+                {/* VMware Window Title Bar */}
+                <mesh position={[0, 0.37, 0]}>
+                    <planeGeometry args={[1.4, 0.05]} />
+                    <meshBasicMaterial color="#2d2d2d" />
+                </mesh>
+
+                {/* VMware Icon */}
+                <mesh position={[-0.65, 0.37, 0.001]}>
+                    <planeGeometry args={[0.025, 0.025]} />
+                    <meshBasicMaterial color="#00a8e1" />
+                </mesh>
+
+                {/* VMware Title Text */}
+                <Text
+                    position={[-0.35, 0.37, 0.001]}
+                    fontSize={0.02}
+                    color="#ffffff"
+                    anchorX="center"
+                    font={DEFAULT_FONT}
+                >
+                    VMware Workstation Pro
+                </Text>
+
+                {/* Window Control Buttons */}
+                <group position={[0.62, 0.37, 0.001]}>
+                    {/* Minimize */}
+                    <mesh position={[-0.06, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#404040" />
+                    </mesh>
+                    <Text position={[-0.06, -0.003, 0.001]} fontSize={0.015} color="#ffffff">_</Text>
+
+                    {/* Maximize */}
+                    <mesh position={[-0.03, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#404040" />
+                    </mesh>
+                    <Text position={[-0.03, 0, 0.001]} fontSize={0.015} color="#ffffff">□</Text>
+
+                    {/* Close */}
+                    <mesh position={[0, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#e81123" />
+                    </mesh>
+                    <Text position={[0, 0, 0.001]} fontSize={0.015} color="#ffffff">✕</Text>
+                </group>
+
+                {/* YouTube Music Player - Show when music is active */}
+                {musicActive && (
+                    <>
+                        <Html position={[0, 0, 0.01]} transform occlude distanceFactor={0.7}>
+                            <div style={{ width: '560px', height: '314px', background: '#000', overflow: 'hidden', pointerEvents: 'auto' }}>
+                                <iframe
+                                    width="560"
+                                    height="314"
+                                    src="https://www.youtube.com/embed/YVowLNuV4Zk?autoplay=1&start=214"
+                                    title="YouTube Music Player"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </Html>
+                        {/* Close Button */}
+                        <mesh position={[0.65, 0.32, 0.02]} onClick={(e) => { e.stopPropagation(); setMusicActive(false) }}>
+                            <planeGeometry args={[0.06, 0.06]} />
+                            <meshBasicMaterial color="#ff0000" />
+                        </mesh>
+                        <Text position={[0.65, 0.32, 0.021]} fontSize={0.04} color="white" anchorX="center" font={DEFAULT_FONT}>
+                            ✕
+                        </Text>
+                    </>
+                )}
+
+                {/* Desktop Icons - Only show when music is not active */}
+                {!musicActive && (
+                    <>
+                        <XiaomiDesktopIcon
+                            position={[-0.5, 0.15, 0]}
+                            iconUrl="/textures/logos/githublogo.png"
+                            label="GitHub"
+                            onClick={() => window.open('https://github.com/sametuca', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[-0.15, 0.15, 0]}
+                            iconUrl="/textures/logos/mediumlogo.png"
+                            label="Medium"
+                            onClick={() => window.open('https://medium.com/@sametuca', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[0.2, 0.15, 0]}
+                            iconUrl="/textures/logos/certificatelogo.png"
+                            label="Certificate"
+                            onClick={() => setOverlay('certificates')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[0.55, 0.15, 0]}
+                            iconUrl="/textures/logos/contactlogo.png"
+                            label="About"
+                            onClick={() => setOverlay('contact')}
+                        />
+                    </>
+                )}
+
+                {/* Taskbar */}
+                <mesh position={[0, -0.36, 0]}>
+                    <planeGeometry args={[1.4, 0.06]} />
+                    <meshBasicMaterial color="#1a1a1a" />
+                </mesh>
+
+                {/* Start Button - Opens YouTube Music */}
+                <group position={[-0.63, -0.36, 0.001]} onClick={(e) => { e.stopPropagation(); setMusicActive(true) }}>
+                    <mesh>
+                        <planeGeometry args={[0.08, 0.04]} />
+                        <meshBasicMaterial color="#0078d4" />
+                    </mesh>
+                    <Text
+                        fontSize={0.025}
+                        color="#ffffff"
+                        anchorX="center"
+                        font={DEFAULT_FONT}
+                    >
+                        ⊞
+                    </Text>
+                </group>
+
+                {/* Clock */}
+                <Text
+                    position={[0.6, -0.36, 0.001]}
+                    fontSize={0.018}
+                    color="#ffffff"
+                    anchorX="center"
+                    font={DEFAULT_FONT}
+                >
+                    {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+                </Text>
             </group>
         </group>
     )
@@ -134,42 +254,161 @@ function XiaomiMonitor({ position, rotation, scale }: { position: [number, numbe
 // Xiaomi Code Monitor component - for tech stack icons
 function XiaomiCodeMonitor({ position, rotation, scale }: { position: [number, number, number], rotation: [number, number, number], scale: number }) {
     const { scene } = useGLTF('/models/xiaomi_4k_27_monitor/scene.gltf')
+    const { musicActive, setMusicActive } = useMusic()
 
     return (
         <group position={position} rotation={rotation} scale={scale}>
             <primitive object={scene.clone()} scale={3.015} position={[0, 0.3, 0]} />
             {/* Screen Content - Tech Stack Icons */}
             <group position={[0, 0.3, 0.08]}>
-                <XiaomiDesktopIcon
-                    position={[-0.6, 0.2, 0]}
-                    iconUrl="/textures/logos/reactlogo.webp"
-                    label="React"
-                    onClick={() => window.open('https://react.dev', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[-0.25, 0.2, 0]}
-                    iconUrl="/textures/logos/typescriptlogo.png"
-                    label="TypeScript"
-                    onClick={() => window.open('https://typescriptlang.org', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[0.1, 0.2, 0]}
-                    iconUrl="/textures/logos/nodejslogo.png"
-                    label="Node.js"
-                    onClick={() => window.open('https://nodejs.org', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[0.45, 0.2, 0]}
-                    iconUrl="/textures/logos/threejslogo.png"
-                    label="Three.js"
-                    onClick={() => window.open('https://threejs.org', '_blank')}
-                />
-                <XiaomiDesktopIcon
-                    position={[-0.6, -0.1, 0]}
-                    iconUrl="/textures/logos/nextjslogo.webp"
-                    label="Next.js"
-                    onClick={() => window.open('https://nextjs.org', '_blank')}
-                />
+                {/* Black Background */}
+                <mesh position={[0, 0, -0.01]}>
+                    <planeGeometry args={[1.4, 0.8]} />
+                    <meshBasicMaterial color="#000000" />
+                </mesh>
+
+                {/* VMware Window Title Bar */}
+                <mesh position={[0, 0.37, 0]}>
+                    <planeGeometry args={[1.4, 0.05]} />
+                    <meshBasicMaterial color="#2d2d2d" />
+                </mesh>
+
+                {/* VMware Icon */}
+                <mesh position={[-0.65, 0.37, 0.001]}>
+                    <planeGeometry args={[0.025, 0.025]} />
+                    <meshBasicMaterial color="#00a8e1" />
+                </mesh>
+
+                {/* VMware Title Text */}
+                <Text
+                    position={[-0.35, 0.37, 0.001]}
+                    fontSize={0.02}
+                    color="#ffffff"
+                    anchorX="center"
+                    font={DEFAULT_FONT}
+                >
+                    VMware Workstation Pro
+                </Text>
+
+                {/* Window Control Buttons */}
+                <group position={[0.62, 0.37, 0.001]}>
+                    {/* Minimize */}
+                    <mesh position={[-0.06, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#404040" />
+                    </mesh>
+                    <Text position={[-0.06, -0.003, 0.001]} fontSize={0.015} color="#ffffff">_</Text>
+
+                    {/* Maximize */}
+                    <mesh position={[-0.03, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#404040" />
+                    </mesh>
+                    <Text position={[-0.03, 0, 0.001]} fontSize={0.015} color="#ffffff">□</Text>
+
+                    {/* Close */}
+                    <mesh position={[0, 0, 0]}>
+                        <planeGeometry args={[0.025, 0.025]} />
+                        <meshBasicMaterial color="#e81123" />
+                    </mesh>
+                    <Text position={[0, 0, 0.001]} fontSize={0.015} color="#ffffff">✕</Text>
+                </group>
+
+                {/* YouTube Music Player - Show when music is active */}
+                {musicActive && (
+                    <>
+                        <Html position={[0, 0, 0.01]} transform occlude distanceFactor={0.7}>
+                            <div style={{ width: '560px', height: '314px', background: '#000', overflow: 'hidden', pointerEvents: 'auto' }}>
+                                <iframe
+                                    width="560"
+                                    height="314"
+                                    src="https://www.youtube.com/embed/YVowLNuV4Zk?autoplay=1&start=214"
+                                    title="YouTube Music Player"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            </div>
+                        </Html>
+                        {/* Close Button */}
+                        <mesh position={[0.65, 0.32, 0.02]} onClick={(e) => { e.stopPropagation(); setMusicActive(false) }}>
+                            <planeGeometry args={[0.06, 0.06]} />
+                            <meshBasicMaterial color="#ff0000" />
+                        </mesh>
+                        <Text position={[0.65, 0.32, 0.021]} fontSize={0.04} color="white" anchorX="center" font={DEFAULT_FONT}>
+                            ✕
+                        </Text>
+                    </>
+                )}
+
+                {/* Desktop Icons - Only show when music is not active */}
+                {!musicActive && (
+                    <>
+                        <XiaomiDesktopIcon
+                            position={[-0.6, 0.2, 0]}
+                            iconUrl="/textures/logos/reactlogo.webp"
+                            label="React"
+                            onClick={() => window.open('https://react.dev', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[-0.25, 0.2, 0]}
+                            iconUrl="/textures/logos/typescriptlogo.png"
+                            label="TypeScript"
+                            onClick={() => window.open('https://typescriptlang.org', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[0.1, 0.2, 0]}
+                            iconUrl="/textures/logos/nodejslogo.png"
+                            label="Node.js"
+                            onClick={() => window.open('https://nodejs.org', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[0.45, 0.2, 0]}
+                            iconUrl="/textures/logos/threejslogo.png"
+                            label="Three.js"
+                            onClick={() => window.open('https://threejs.org', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[-0.6, -0.1, 0]}
+                            iconUrl="/textures/logos/nextjslogo.webp"
+                            label="Next.js"
+                            onClick={() => window.open('https://nextjs.org', '_blank')}
+                        />
+                    </>
+                )}
+
+                {/* Taskbar */}
+                <mesh position={[0, -0.36, 0]}>
+                    <planeGeometry args={[1.4, 0.06]} />
+                    <meshBasicMaterial color="#1a1a1a" />
+                </mesh>
+
+                {/* Start Button - Opens YouTube Music */}
+                <group position={[-0.63, -0.36, 0.001]} onClick={(e) => { e.stopPropagation(); setMusicActive(true) }}>
+                    <mesh>
+                        <planeGeometry args={[0.08, 0.04]} />
+                        <meshBasicMaterial color="#0078d4" />
+                    </mesh>
+                    <Text
+                        fontSize={0.025}
+                        color="#ffffff"
+                        anchorX="center"
+                        font={DEFAULT_FONT}
+                    >
+                        ⊞
+                    </Text>
+                </group>
+
+                {/* Clock */}
+                <Text
+                    position={[0.6, -0.36, 0.001]}
+                    fontSize={0.018}
+                    color="#ffffff"
+                    anchorX="center"
+                    font={DEFAULT_FONT}
+                >
+                    {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+                </Text>
             </group>
         </group>
     )
