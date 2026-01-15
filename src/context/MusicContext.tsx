@@ -5,7 +5,7 @@ type MusicContextType = {
     musicActive: boolean
     setMusicActive: (active: boolean) => void
 }
-
+ 
 const MusicContext = createContext<MusicContextType | undefined>(undefined)
 
 export const MusicProvider = ({ children }: { children: ReactNode }) => {
