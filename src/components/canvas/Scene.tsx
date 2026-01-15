@@ -1,4 +1,4 @@
-import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing'
+// import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing' // Disabled for performance
 import { useState } from 'react'
 
 export const Scene = () => {
@@ -13,12 +13,14 @@ export const Scene = () => {
             {/* Subtle Environment - Gradient background for cyberpunk atmosphere */}
             <color attach="background" args={[lightsOn ? '#0a0a1a' : '#000000']} />
 
-            {/* Post Processing for Cyberpunk Feel - Optimized */}
+            {/* Post Processing disabled for performance */}
+            {/* 
             <EffectComposer multisampling={0}>
                 <Bloom luminanceThreshold={1} intensity={1.2} radius={0.3} />
                 <Noise opacity={0.03} />
                 <Vignette eskil={false} offset={0.1} darkness={1.1} />
             </EffectComposer>
+            */}
 
             {/* Pass light state to children */}
             <group userData={{ lightsOn, toggleLights: () => setLightsOn(!lightsOn) }} />

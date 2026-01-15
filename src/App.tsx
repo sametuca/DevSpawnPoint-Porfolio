@@ -16,12 +16,13 @@ function App() {
       <MusicProvider>
         <Overlay />
         <Canvas
-          shadows="soft"
+          shadows={false} // Shadows disabled for better performance
           camera={{ position: [0, 2.5, 3.5], fov: 50 }}
-          dpr={[1, 1.5]} // Reduced for better performance
-          performance={{ min: 0.5 }} // Adaptive performance
+          dpr={[1, 1]} // Fixed to 1 for maximum performance
+          performance={{ min: 0.1 }} // More aggressive performance scaling
+          frameloop="demand" // Only render when needed
           gl={{
-            antialias: true,
+            antialias: false, // Disabled for better performance
             powerPreference: "high-performance",
             alpha: false,
             stencil: false,
@@ -39,6 +40,8 @@ function App() {
               maxPolarAngle={Math.PI / 1.5}
               minDistance={1}
               maxDistance={5}
+              enableDamping={true}
+              dampingFactor={0.05}
             />
           </Suspense>
         </Canvas>
