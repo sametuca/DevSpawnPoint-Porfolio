@@ -7,7 +7,7 @@ type MusicContextType = {
 }
  
 const MusicContext = createContext<MusicContextType | undefined>(undefined)
-
+ 
 export const MusicProvider = ({ children }: { children: ReactNode }) => {
     const [musicActive, setMusicActive] = useState(false)
 
