@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
+import { DEFAULT_FONT } from '../../constants/fonts'
 import { Text, Image, Html } from '@react-three/drei'
 import { useOverlay } from '../../context/OverlayContext'
 import { useMusic } from '../../context/MusicContext'
@@ -48,6 +49,7 @@ const DesktopIcon = ({
                 anchorX="center"
                 outlineWidth={0.002}
                 outlineColor="#000"
+                font={DEFAULT_FONT}
             >
                 {label}
             </Text>
@@ -195,7 +197,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             <planeGeometry args={[0.08, 0.08]} />
                             <meshBasicMaterial color="#ff0000" />
                         </mesh>
-                        <Text position={[0.75, 0.4, 0.071]} fontSize={0.05} color="white" anchorX="center">
+                        <Text position={[0.75, 0.4, 0.071]} fontSize={0.05} color="white" anchorX="center" font={DEFAULT_FONT}>
                             ✕
                         </Text>
                     </group>
@@ -272,7 +274,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                     <group position={[0, 0.05, 0.07]}>
                         {/* Instructions */}
                         {directionRef.current.x === 0 && directionRef.current.y === 0 && (
-                            <Text position={[0, 0, 0]} fontSize={0.06} color="#00ff00" anchorX="center">
+                            <Text position={[0, 0, 0]} fontSize={0.06} color="#00ff00" anchorX="center" font={DEFAULT_FONT}>
                                 Press Arrow Keys to Start
                             </Text>
                         )}
@@ -287,7 +289,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             <planeGeometry args={[0.075, 0.037]} />
                             <meshBasicMaterial color="#ff0000" />
                         </mesh>
-                        <Text position={[0, 0.4, 0]} fontSize={0.05} color="#00ff00" anchorX="center">
+                        <Text position={[0, 0.4, 0]} fontSize={0.05} color="#00ff00" anchorX="center" font={DEFAULT_FONT}>
                             Score: {score}
                         </Text>
                     </group>
@@ -313,6 +315,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             anchorX="center"
                             outlineWidth={0.003}
                             outlineColor="#000"
+                            font={DEFAULT_FONT}
                         >
                             Gemini AI
                         </Text>
@@ -331,7 +334,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             <planeGeometry args={[0.12, 0.05]} />
                             <meshBasicMaterial color="#0078d4" />
                         </mesh>
-                        <Text position={[-0.78, -0.42, 0.067]} fontSize={0.03} color="white" anchorX="center">
+                        <Text position={[-0.78, -0.42, 0.067]} fontSize={0.03} color="white" anchorX="center" font={DEFAULT_FONT}>
                             ⊞
                         </Text>
                         {/* Taskbar Icons */}
@@ -342,7 +345,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             </mesh>
                         ))}
                         {/* System Tray */}
-                        <Text position={[0.75, -0.42, 0.066]} fontSize={0.025} color="#ccc" anchorX="right">
+                        <Text position={[0.75, -0.42, 0.066]} fontSize={0.025} color="#ccc" anchorX="right" font={DEFAULT_FONT}>
                             12:34
                         </Text>
                     </>
@@ -368,6 +371,6 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                     </mesh>
                 </group>
             </group>
-        </group>
+        </group >
     )
 }

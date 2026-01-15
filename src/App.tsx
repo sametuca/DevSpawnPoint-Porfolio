@@ -16,9 +16,17 @@ function App() {
       <MusicProvider>
         <Overlay />
         <Canvas
-          shadows
+          shadows="soft"
           camera={{ position: [0, 2.5, 3.5], fov: 50 }}
-          dpr={[1, 2]}
+          dpr={[1, 1.5]} // Reduced for better performance
+          performance={{ min: 0.5 }} // Adaptive performance
+          gl={{
+            antialias: true,
+            powerPreference: "high-performance",
+            alpha: false,
+            stencil: false,
+            depth: true
+          }}
         >
           <color attach="background" args={['#050510']} />
           <Suspense fallback={<LoadingScreen />}>
