@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { useTexture, Text, useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useState } from 'react'
+import { DEFAULT_FONT } from '../../constants/fonts'
 
 function Armchair() {
     const { scene } = useGLTF('/models/armchair/scene.gltf')
@@ -185,6 +186,7 @@ export const Room = () => {
                         fontSize={0.06}
                         color="#00ffff"
                         anchorX="center"
+                        font={DEFAULT_FONT}
                     >
                         🖱️ Controls
                     </Text>
@@ -194,6 +196,7 @@ export const Room = () => {
                         fontSize={0.045}
                         color="#ffffff"
                         anchorX="center"
+                        font={DEFAULT_FONT}
                     >
                         Left Click + Drag → Rotate
                     </Text>
@@ -202,6 +205,7 @@ export const Room = () => {
                         fontSize={0.045}
                         color="#ffffff"
                         anchorX="center"
+                        font={DEFAULT_FONT}
                     >
                         Right Click + Drag → Pan
                     </Text>
@@ -210,6 +214,7 @@ export const Room = () => {
                         fontSize={0.045}
                         color="#ffffff"
                         anchorX="center"
+                        font={DEFAULT_FONT}
                     >
                         Scroll → Zoom In/Out
                     </Text>
@@ -218,6 +223,7 @@ export const Room = () => {
                         fontSize={0.035}
                         color="#888888"
                         anchorX="center"
+                        font={DEFAULT_FONT}
                     >
                         Click on monitors to interact!
                     </Text>

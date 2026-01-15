@@ -1,12 +1,13 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useState } from 'react'
+import type { ReactNode } from 'react'
 
 type MusicContextType = {
     musicActive: boolean
     setMusicActive: (active: boolean) => void
 }
-
+ 
 const MusicContext = createContext<MusicContextType | undefined>(undefined)
-
+ 
 export const MusicProvider = ({ children }: { children: ReactNode }) => {
     const [musicActive, setMusicActive] = useState(false)
 

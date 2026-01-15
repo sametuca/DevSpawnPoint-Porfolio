@@ -4,6 +4,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
 import * as THREE from 'three'
 import { useMemo, useState } from 'react'
 import { useOverlay } from '../../context/OverlayContext'
+import { DEFAULT_FONT } from '../../constants/fonts'
 
 // MacBook component with Gemini app
 function MacBook({ position, rotation, scale }: { position: [number, number, number], rotation: [number, number, number], scale: number }) {
@@ -40,6 +41,7 @@ function MacBook({ position, rotation, scale }: { position: [number, number, num
                     fontSize={0.02}
                     color="#ffffff"
                     anchorX="center"
+                    font={DEFAULT_FONT}
                 >
                     Gemini
                 </Text>
@@ -371,6 +373,7 @@ export const Desk = () => {
                 color="#333"
                 anchorX="left"
                 anchorY="middle"
+                font={DEFAULT_FONT}
             >
                 detail
             </Text>
@@ -401,3 +404,15 @@ export const Desk = () => {
         </group>
     )
 }
+
+// Preload all models for better performance
+useGLTF.preload('/models/macbook/scene.gltf')
+useGLTF.preload('/models/donalduck/donaldduck.gltf')
+useGLTF.preload('/models/christimas/scene.gltf')
+useGLTF.preload('/models/xmas-tree/scene.gltf')
+useGLTF.preload('/models/steamController/scene.gltf')
+useGLTF.preload('/models/gamingChair/scene.gltf')
+useGLTF.preload('/models/iphone/scene.gltf')
+useGLTF.preload('/models/cp-mouse/scene.gltf')
+useGLTF.preload('/models/cp-keyboard/scene.gltf')
+useGLTF.preload('/models/glasses/scene.gltf')

@@ -2,6 +2,7 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Text } from '@react-three/drei'
+import { DEFAULT_FONT } from '../../constants/fonts'
 
 export const MatrixScreen = () => {
     // Very tight bounds to prevent overflow
@@ -42,6 +43,7 @@ export const MatrixScreen = () => {
                     color="#00ff00"
                     anchorY="top"
                     anchorX="center"
+                    font={DEFAULT_FONT}
                 >
                     {Array.from({ length: rows }).map(() => chars[Math.floor(Math.random() * chars.length)]).join('\n')}
                 </Text>
