@@ -9,8 +9,8 @@ function Speaker() {
 
 function Server3D() {
     const { scene } = useGLTF('/models/server/scene.gltf')
-    return <primitive object={scene.clone()} position={[-0.20, -0.05, 0.1]} 
-    scale={0.4} rotation={[0, 0, 0]} />
+    return <primitive object={scene.clone()} position={[-0.20, -0.05, 0.1]}
+        scale={0.4} rotation={[0, 0, 0]} />
 }
 
 
@@ -37,6 +37,26 @@ function GoogleModel() {
         </group>
     )
 }
+
+function PacManModel() {
+    const { scene } = useGLTF('/models/pacman/scene.gltf')
+
+    return (
+        <group>
+            <primitive object={scene.clone()} position={[3, 1.8, 1.2]} scale={0.6} rotation={[0, -Math.PI / 2, 0]} />
+            {/* Subtle spotlight to illuminate the model */}
+            <spotLight
+                position={[2.5, 2.2, 1.2]}
+                angle={0.5}
+                penumbra={0.5}
+                intensity={2}
+                color="#ffff88"
+                target-position={[2.9, 1.8, 1.2]}
+            />
+        </group>
+    )
+}
+
 
 export const InteractiveElements = () => {
     return (
@@ -89,6 +109,9 @@ export const InteractiveElements = () => {
 
             {/* Right Wall - Google Model */}
             <GoogleModel />
+
+            {/* Right Wall - Pac-Man Model */}
+            <PacManModel />
         </group>
     )
 }

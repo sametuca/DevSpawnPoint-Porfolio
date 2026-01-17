@@ -1,72 +1,73 @@
 import { Html, useProgress } from '@react-three/drei'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import './LoadingScreen.css'
 
-const loadingTips = [
-    "💡 Click on monitors to interact with apps",
-    "🖱️ Use scroll to zoom in/out",
-    "🎮 Try clicking on the TV for a surprise!",
-    "💡 Left click + drag to rotate the view",
-    "🎄 Click the Christmas tree for Santa!",
-    "☕ Click the coffee cup for an effect",
-]
-
-const getStatusMessage = (progress: number): string => {
-    if (progress < 20) return "Loading 3D models..."
-    if (progress < 40) return "Preparing textures..."
-    if (progress < 60) return "Setting up lighting..."
-    if (progress < 80) return "Building the room..."
-    if (progress < 95) return "Final touches..."
-    return "Almost ready!"
-}
-
 const LoadingProgress = () => {
-    const { progress, active, loaded, total } = useProgress()
+    const { progress, active, item } = useProgress()
     const [displayProgress, setDisplayProgress] = useState(0)
-    const [tipIndex, setTipIndex] = useState(0)
-
-    const statusMessage = useMemo(() => getStatusMessage(progress), [progress])
+    const [currentItem, setCurrentItem] = useState('')
 
     useEffect(() => {
         setDisplayProgress(progress)
     }, [progress])
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setTipIndex((prev) => (prev + 1) % loadingTips.length)
-        }, 3000)
-        return () => clearInterval(interval)
-    }, [])
+        if (item) {
+            // Extract filename from path
+            const fileName = item.split('/').pop()?.replace('.gltf', '').replace('.glb', '') || ''
+            setCurrentItem(fileName)
+        }
+    }, [item])
 
     if (!active && displayProgress >= 100) return null
 
     return (
         <div className="loading-container">
             <div className="loading-content">
-                <div className="loading-icon">
-                    <div className="cube">
-                        <div className="face front"></div>
-                        <div className="face back"></div>
-                        <div className="face right"></div>
-                        <div className="face left"></div>
-                        <div className="face top"></div>
-                        <div className="face bottom"></div>
+                {/* Animated Logo */}
+                <div className="loading-logo">
+                    <div className="logo-ring"></div>
+                    <div className="logo-ring-2"></div>
+                    <div className="logo-center">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#gradient1)" />
+                            <path d="M2 17L12 22L22 17" stroke="url(#gradient2)" strokeWidth="2" strokeLinecap="round" />
+                            <path d="M2 12L12 17L22 12" stroke="url(#gradient2)" strokeWidth="2" strokeLinecap="round" />
+                            <defs>
+                                <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="12">
+                                    <stop offset="0%" stopColor="#00ffff" />
+                                    <stop offset="100%" stopColor="#00ff88" />
+                                </linearGradient>
+                                <linearGradient id="gradient2" x1="2" y1="12" x2="22" y2="22">
+                                    <stop offset="0%" stopColor="#00ffff" />
+                                    <stop offset="100%" stopColor="#00ff88" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
                 </div>
-                <h2 className="loading-title">DevSpawnPoint</h2>
-                <p className="status-message">{statusMessage}</p>
-                <div className="progress-bar-container">
-                    <div
-                        className="progress-bar"
-                        style={{ width: `${displayProgress}%` }}
-                    />
-                </div>
-                <p className="loading-text">{displayProgress.toFixed(0)}% loaded</p>
-                {total > 0 && (
-                    <p className="loading-items">Loading asset {loaded} of {total}</p>
+
+                {/* Title */}
+                <h1 className="loading-title">DevSpawnPoint</h1>
+
+                {/* Loading Status */}
+                {currentItem && (
+                    <p className="loading-status">
+                        Loading: <span className="loading-item-name">{currentItem}</span>
+                    </p>
                 )}
-                <div className="loading-tip">
-                    <p>{loadingTips[tipIndex]}</p>
+
+                {/* Progress Bar */}
+                <div className="progress-container">
+                    <div className="progress-bar-wrapper">
+                        <div
+                            className="progress-bar-fill"
+                            style={{ width: `${displayProgress}%` }}
+                        >
+                            <div className="progress-shine"></div>
+                        </div>
+                    </div>
+                    <p className="progress-text">{displayProgress.toFixed(0)}%</p>
                 </div>
             </div>
         </div>

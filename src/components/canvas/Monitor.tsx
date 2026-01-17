@@ -62,6 +62,7 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
     const { musicActive, setMusicActive } = useMusic()
     const [hovered, setHover] = useState(false)
     const [gameActive, setGameActive] = useState(false)
+    const [startMenuOpen, setStartMenuOpen] = useState(false)
     const [snake, setSnake] = useState([{ x: 10, y: 10 }])
     const [food, setFood] = useState({ x: 15, y: 15 })
     // const [direction, setDirection] = useState({ x: 0, y: 0 }) // Removed unused state
@@ -241,6 +242,18 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             label="Next.js"
                             onClick={() => window.open('https://nextjs.org', '_blank')}
                         />
+                        <DesktopIcon
+                            position={[-0.3, -0.05, 0]}
+                            iconUrl="/textures/logos/css.png"
+                            label="CSS"
+                            onClick={() => window.open('https://developer.mozilla.org/en-US/docs/Web/CSS', '_blank')}
+                        />
+                        <DesktopIcon
+                            position={[0, -0.05, 0]}
+                            iconUrl="/textures/logos/csharplogo.png"
+                            label="C#"
+                            onClick={() => window.open('https://learn.microsoft.com/en-us/dotnet/csharp/', '_blank')}
+                        />
                     </group>
                 )}
 
@@ -340,13 +353,70 @@ export const Monitor = ({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1,
                             <meshBasicMaterial color="#1f1f1f" opacity={0.95} transparent />
                         </mesh>
                         {/* Start Button */}
-                        <mesh position={[-0.78, -0.35, 0.066]} onClick={(e) => { e.stopPropagation(); setGameActive(true) }}>
+                        <mesh position={[-0.78, -0.35, 0.066]} onClick={(e) => { e.stopPropagation(); setStartMenuOpen(!startMenuOpen) }}>
                             <planeGeometry args={[0.12, 0.05]} />
                             <meshBasicMaterial color="#0078d4" />
                         </mesh>
                         <Text position={[-0.78, -0.42, 0.067]} fontSize={0.03} color="white" anchorX="center" font={DEFAULT_FONT}>
                             ⊞
                         </Text>
+
+                        {/* Start Menu */}
+                        {startMenuOpen && (
+                            <group position={[-0.5, -0.1, 0.07]}>
+                                {/* Menu Background */}
+                                <mesh>
+                                    <planeGeometry args={[0.5, 0.4]} />
+                                    <meshBasicMaterial color="#2d2d2d" opacity={0.98} transparent />
+                                </mesh>
+                                {/* Menu Border */}
+                                <mesh position={[0, 0, -0.001]}>
+                                    <planeGeometry args={[0.51, 0.41]} />
+                                    <meshBasicMaterial color="#0078d4" />
+                                </mesh>
+                                {/* Menu Title */}
+                                <Text position={[0, 0.16, 0.001]} fontSize={0.035} color="#00ffff" anchorX="center" font={DEFAULT_FONT}>
+                                    Applications
+                                </Text>
+
+                                {/* YouTube App */}
+                                <group position={[0, 0.05, 0.001]}>
+                                    <mesh onClick={(e) => { e.stopPropagation(); setMusicActive(true); setStartMenuOpen(false); }}>
+                                        <planeGeometry args={[0.45, 0.08]} />
+                                        <meshBasicMaterial color="#3a3a3a" />
+                                    </mesh>
+                                    <mesh position={[-0.18, 0, 0.001]}>
+                                        <planeGeometry args={[0.06, 0.06]} />
+                                        <meshBasicMaterial color="#ff0000" />
+                                    </mesh>
+                                    <Text position={[-0.18, 0, 0.002]} fontSize={0.04} color="white" anchorX="center" font={DEFAULT_FONT}>
+                                        ▶
+                                    </Text>
+                                    <Text position={[0.05, 0, 0.001]} fontSize={0.03} color="white" anchorX="center" font={DEFAULT_FONT}>
+                                        YouTube
+                                    </Text>
+                                </group>
+
+                                {/* Snake Game App */}
+                                <group position={[0, -0.08, 0.001]}>
+                                    <mesh onClick={(e) => { e.stopPropagation(); setGameActive(true); setStartMenuOpen(false); }}>
+                                        <planeGeometry args={[0.45, 0.08]} />
+                                        <meshBasicMaterial color="#3a3a3a" />
+                                    </mesh>
+                                    <mesh position={[-0.18, 0, 0.001]}>
+                                        <planeGeometry args={[0.06, 0.06]} />
+                                        <meshBasicMaterial color="#00ff00" />
+                                    </mesh>
+                                    <Text position={[-0.18, 0, 0.002]} fontSize={0.04} color="black" anchorX="center" font={DEFAULT_FONT}>
+                                        🐍
+                                    </Text>
+                                    <Text position={[0.05, 0, 0.001]} fontSize={0.03} color="white" anchorX="center" font={DEFAULT_FONT}>
+                                        Snake Game
+                                    </Text>
+                                </group>
+                            </group>
+                        )}
+
                         {/* Taskbar Icons */}
                         {[-0.6, -0.5, -0.4].map((x, i) => (
                             <mesh key={i} position={[x, -0.35, 0.066]}>

@@ -34,3 +34,23 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #16507e;
 }
+
+/* Stats Panel Styling */
+.stats-panel {
+  position: fixed !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: auto !important;
+  opacity: 0.9 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(0, 255, 255, 0.2) !important;
+  backdrop-filter: blur(10px) !important;
+  transform: scale(1.5) !important;
+  transform-origin: top right !important;
+}
+
+.stats-panel canvas {
+  border-radius: 8px !important;
+}

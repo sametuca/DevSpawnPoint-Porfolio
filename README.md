@@ -72,5 +72,17 @@ To run the project locally:
 
 The 3D models used in the project are located in the `public/models` directory. All models are in GLTF/GLB format and optimized for web performance. The scene consists of a desk, gaming chair, monitors, decorative items, and custom lighting setups.
 
+## Project Journey
+
+This project started with a detailed implementation plan and task breakdown. Here's how it all began:
+
+### Initial Planning
+
+![Implementation Plan](public/screenshots/initial/implementation-plan.png)
+*Initial implementation plan - Building a hyper-realistic, first-person 3D environment*
+
+![Project Tasks](public/screenshots/initial/project-tasks.png)
+*Detailed task breakdown - From project initialization to final polish*
+
 ---
 *Developed by: [Samet Uca](https://github.com/sametuca)*

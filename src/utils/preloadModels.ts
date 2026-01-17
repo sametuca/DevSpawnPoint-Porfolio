@@ -27,6 +27,7 @@ const modelPaths = [
     '/models/christimas/scene.gltf',
     '/models/donalduck/scene.gltf',
     '/models/google/scene.gltf',
+    '/models/pacman/scene.gltf',
     '/models/speaker/scene.gltf',
     '/models/server/scene.gltf',
     '/models/vacuum-robot/scene.gltf',

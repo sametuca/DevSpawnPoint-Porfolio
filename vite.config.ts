@@ -15,4 +15,27 @@ export default defineConfig({
       },
     },
   },
+  publicDir: 'public',
+  assetsInclude: ['**/*.gltf', '**/*.glb', '**/*.bin', '**/*.obj', '**/*.mtl'],
+  optimizeDeps: {
+    exclude: ['three/examples/jsm/loaders/GLTFLoader', 'three/examples/jsm/loaders/OBJLoader'],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Three.js core
+          'three-core': ['three'],
+          // React Three Fiber and Drei
+          'react-three': ['@react-three/fiber', '@react-three/drei'],
+          // React vendor
+          'react-vendor': ['react', 'react-dom'],
+          // Other vendor libraries
+          'vendor': ['troika-three-text'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+    assetsInlineLimit: 0, // Don't inline any assets, serve them as separate files
+  },
 })

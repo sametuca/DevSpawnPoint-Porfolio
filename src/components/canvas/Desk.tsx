@@ -190,8 +190,8 @@ function XiaomiMonitor({ position, rotation, scale }: { position: [number, numbe
                         <XiaomiDesktopIcon
                             position={[-0.5, 0.15, 0]}
                             iconUrl="/textures/logos/githublogo.png"
-                            label="GitHub"
-                            onClick={() => window.open('https://github.com/sametuca', '_blank')}
+                            label="Projects"
+                            onClick={() => setOverlay('projects')}
                         />
                         <XiaomiDesktopIcon
                             position={[-0.15, 0.15, 0]}
@@ -373,6 +373,18 @@ function XiaomiCodeMonitor({ position, rotation, scale }: { position: [number, n
                             iconUrl="/textures/logos/nextjslogo.webp"
                             label="Next.js"
                             onClick={() => window.open('https://nextjs.org', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[-0.25, -0.1, 0]}
+                            iconUrl="/textures/logos/css.png"
+                            label="CSS"
+                            onClick={() => window.open('https://developer.mozilla.org/en-US/docs/Web/CSS', '_blank')}
+                        />
+                        <XiaomiDesktopIcon
+                            position={[0.1, -0.1, 0]}
+                            iconUrl="/textures/logos/csharplogo.png"
+                            label="C#"
+                            onClick={() => window.open('https://learn.microsoft.com/en-us/dotnet/csharp/', '_blank')}
                         />
                     </>
                 )}

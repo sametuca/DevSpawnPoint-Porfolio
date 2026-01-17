@@ -1,12 +1,30 @@
 import * as THREE from 'three'
-import { useTexture, Text, useGLTF } from '@react-three/drei'
+import { useTexture, Text, useGLTF, Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DEFAULT_FONT } from '../../constants/fonts'
 
-function Armchair() {
+function Armchair({ onClick }: { onClick: () => void }) {
     const { scene } = useGLTF('/models/armchair/scene.gltf')
-    return <primitive object={scene} position={[1.5, -1.0, 1.8]} scale={0.9} rotation={[0, Math.PI, 0]} />
+    const clonedScene = scene.clone()
+
+    // Make all meshes clickable
+    clonedScene.traverse((child: any) => {
+        if (child.isMesh) {
+            child.userData.clickable = true
+        }
+    })
+
+    return (
+        <group position={[1.5, -1.0, 1.8]} rotation={[0, Math.PI, 0]}>
+            {/* Invisible clickable box */}
+            <mesh onClick={(e) => { e.stopPropagation(); onClick(); }}>
+                <boxGeometry args={[0.8, 1, 0.8]} />
+                <meshBasicMaterial transparent opacity={0} />
+            </mesh>
+            <primitive object={clonedScene} scale={0.9} />
+        </group>
+    )
 }
 
 function CeilingLamp({ lightsOn, onClick }: { lightsOn: boolean; onClick: (e: any) => void }) {
@@ -33,10 +51,29 @@ function CeilingLamp({ lightsOn, onClick }: { lightsOn: boolean; onClick: (e: an
     )
 }
 
-function PlayStation5() {
+function PlayStation5({ onClick }: { onClick: () => void }) {
     const { scene } = useGLTF('/models/playstation_5/scene.gltf')
-    return <primitive object={scene.clone()} position={[1.8, -0.85, 0.20]} scale={0.15} rotation={[0, Math.PI / 2, 0]} />
+    const clonedScene = scene.clone()
+
+    // Make all meshes clickable
+    clonedScene.traverse((child: any) => {
+        if (child.isMesh) {
+            child.userData.clickable = true
+        }
+    })
+
+    return (
+        <group position={[1.8, -0.85, 0.20]} rotation={[0, Math.PI / 2, 0]}>
+            {/* Invisible clickable box for easy clicking - covers entire PlayStation */}
+            <mesh onClick={(e) => { e.stopPropagation(); onClick(); }}>
+                <boxGeometry args={[0.6, 0.3, 0.4]} />
+                <meshBasicMaterial transparent opacity={0} />
+            </mesh>
+            <primitive object={clonedScene} scale={0.15} />
+        </group>
+    )
 }
+
 
 function TVTable() {
     const { scene } = useGLTF('/models/tv_table/scene.gltf')
@@ -148,6 +185,27 @@ export const Room = () => {
         '/textures/rdr2.png'
     ])
     const [lightsOn, setLightsOn] = useState(true)
+    const [videoPlaying, setVideoPlaying] = useState(false)
+    const [eyeRest, setEyeRest] = useState(false)
+    const [restCountdown, setRestCountdown] = useState(20)
+
+    // Eye rest logic
+    useEffect(() => {
+        if (!eyeRest) return
+
+        const timer = setInterval(() => {
+            setRestCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer)
+                    setEyeRest(false)
+                    return 20
+                }
+                return prev - 1
+            })
+        }, 100) // 100ms * 20 = 2 seconds
+
+        return () => clearInterval(timer)
+    }, [eyeRest])
 
     const [snowflakes, setSnowflakes] = useState(() =>
         Array.from({ length: 100 }, () => ({
@@ -364,33 +422,61 @@ export const Room = () => {
                     </group>
                 </group>
 
-                {/* TV (Positioned toward front Z) - CLICKABLE */}
-                <group
-                    position={[1.5, 0.2, 0.05]}
-                    onClick={() => window.open('https://supermarioplay.com/fullscreen', '_blank')}
-                >
+                {/* TV (Positioned toward front Z) - YouTube Video Player */}
+                <group position={[1.5, 0.2, 0.05]}>
                     {/* TV Frame */}
                     <mesh>
                         <boxGeometry args={[1.6, 1, 0.08]} />
                         <meshStandardMaterial color="#111" />
                     </mesh>
-                    {/* TV Screen */}
-                    <mesh position={[0, 0, 0.05]}>
-                        <planeGeometry args={[1.5, 0.9]} />
-                        <meshBasicMaterial map={marioTexture} />
-                    </mesh>
+
+                    {videoPlaying ? (
+                        /* YouTube Video Player */
+                        <>
+                            <Html position={[0, 0, 0.06]} transform distanceFactor={0.85}>
+                                <div style={{ width: '560px', height: '315px', background: '#000', overflow: 'hidden', pointerEvents: 'auto' }}>
+                                    <iframe
+                                        width="560"
+                                        height="315"
+                                        src="https://www.youtube.com/embed/rwN3kZYJZiU?autoplay=1"
+                                        title="Super Mario Bros"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            </Html>
+                            {/* Close Button */}
+                            <mesh position={[0.7, 0.4, 0.07]} onClick={(e) => { e.stopPropagation(); setVideoPlaying(false); }}>
+                                <planeGeometry args={[0.12, 0.12]} />
+                                <meshBasicMaterial color="#ff0000" />
+                            </mesh>
+                            <Text position={[0.7, 0.4, 0.071]} fontSize={0.08} color="white" anchorX="center" font={DEFAULT_FONT}>
+                                ✕
+                            </Text>
+                        </>
+                    ) : (
+                        /* TV Screen with Mario Texture */
+                        <mesh position={[0, 0, 0.05]}>
+                            <planeGeometry args={[1.5, 0.9]} />
+                            <meshBasicMaterial map={marioTexture} />
+                        </mesh>
+                    )}
                 </group>
 
                 {/* TV Table / Entertainment Unit */}
                 <TVTable />
 
                 {/* Game Console (PlayStation 5) on TV Table */}
-                <PlayStation5 />
+                <PlayStation5 onClick={() => setVideoPlaying(true)} />
 
                 {/* ===== GAMING AREA ===== */}
 
                 {/* Armchair (In front of TV) - Facing TV */}
-                <Armchair />
+                <Armchair onClick={() => {
+                    setEyeRest(true)
+                    setRestCountdown(20)
+                }} />
 
                 {/* Coffee Table */}
                 <group position={[1.5, -1.1, 0.9]}>
@@ -428,6 +514,43 @@ export const Room = () => {
                 <Cheetos />
             </group>
 
+            {/* Eye Rest Overlay */}
+            {eyeRest && (
+                <Html fullscreen>
+                    <div style={{
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'black',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1000,
+                        transition: 'opacity 0.5s ease-in-out'
+                    }}>
+                        <h1 style={{ color: '#00ffff', fontFamily: 'Segoe UI, sans-serif', fontSize: '3rem', textAlign: 'center' }}>
+                            Resting your eyes
+                        </h1>
+                        <p style={{ color: 'white', fontFamily: 'Segoe UI, sans-serif', fontSize: '1.5rem', marginTop: '20px' }}>
+                            Time remaining: {restCountdown} minutes
+                        </p>
+                        <div style={{
+                            width: '300px',
+                            height: '4px',
+                            background: 'rgba(255,255,255,0.1)',
+                            marginTop: '30px',
+                            borderRadius: '2px'
+                        }}>
+                            <div style={{
+                                width: `${(restCountdown / 20) * 100}%`,
+                                height: '100%',
+                                background: '#00ffff',
+                                transition: 'width 0.1s linear'
+                            }} />
+                        </div>
+                    </div>
+                </Html>
+            )}
         </group>
     )
 }
