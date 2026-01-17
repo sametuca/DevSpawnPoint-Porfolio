@@ -434,6 +434,7 @@ export const Desk = () => {
     const { scene: mouseModel } = useGLTF('/models/cp-mouse/scene.gltf')
     const { scene: keyboardModel } = useGLTF('/models/cp-keyboard/scene.gltf')
     const { scene: glassesModel } = useGLTF('/models/glasses/scene.gltf')
+    const { scene: headphonesModel } = useGLTF('/models/headphones/scene.gltf')
 
 
 
@@ -567,6 +568,11 @@ export const Desk = () => {
             <primitive object={glassesModel.clone()} position={[1.75, 0.76, 0.5]}
                 scale={2.0} rotation={[0, 0.3, 0]} />
 
+            {/* Headphones Model */}
+            <primitive object={headphonesModel.clone()}
+                position={[0.9, 0.87, 0.35]}
+                scale={2.35} rotation={[1.75, 0.05, 0.22]} />
+
             {/* 3D Coffee Cup Model */}
             <group onClick={(e) => { e.stopPropagation(); handleCupClick() }}>
                 <primitive
@@ -655,3 +661,4 @@ useGLTF.preload('/models/iphone/scene.gltf')
 useGLTF.preload('/models/cp-mouse/scene.gltf')
 useGLTF.preload('/models/cp-keyboard/scene.gltf')
 useGLTF.preload('/models/glasses/scene.gltf')
+useGLTF.preload('/models/headphones/scene.gltf')

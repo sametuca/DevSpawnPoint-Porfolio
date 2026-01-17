@@ -63,8 +63,69 @@ function Cheetos() {
 
 function VacuumRobot() {
     const { scene } = useGLTF('/models/vacuum-robot/scene.gltf')
-    return <primitive object={scene.clone()} position={[2, 0.05, -2.2]}
-        scale={1.15} rotation={[0, Math.PI / 4, 0]} />
+    const [animationState, setAnimationState] = useState<'idle' | 'moving-right' | 'paused' | 'moving-left'>('idle')
+    const [position, setPosition] = useState<[number, number, number]>([2, 0.05, -2.2])
+    const [rotation, setRotation] = useState(Math.PI / 4)
+    const clonedScene = scene.clone()
+
+    // Make all meshes clickable
+    clonedScene.traverse((child: any) => {
+        if (child.isMesh) {
+            child.userData.clickable = true
+        }
+    })
+
+    const handleClick = (e: any) => {
+        e.stopPropagation()
+        if (animationState !== 'idle') return
+        setAnimationState('moving-right')
+        setRotation(0) // Face right wall
+    }
+
+    useFrame(() => {
+        if (animationState === 'moving-right') {
+            setPosition(prev => {
+                const [x, y, z] = prev
+                if (x < 2.85) {
+                    return [x + 0.03, y, z]
+                } else {
+                    // Hit the wall, pause
+                    setAnimationState('paused')
+                    setTimeout(() => {
+                        setAnimationState('moving-left')
+                        setRotation(Math.PI) // Face left
+                    }, 300)
+                    return [2.85, y, z]
+                }
+            })
+        } else if (animationState === 'moving-left') {
+            setPosition(prev => {
+                const [x, y, z] = prev
+                if (x > 2.0) {
+                    return [x - 0.03, y, z]
+                } else {
+                    // Back to original position
+                    setAnimationState('idle')
+                    setRotation(Math.PI / 4)
+                    return [2, y, z]
+                }
+            })
+        }
+    })
+
+    return (
+        <group
+            position={position}
+            rotation={[0, rotation, 0]}
+        >
+            {/* Invisible clickable sphere for easy clicking */}
+            <mesh onClick={handleClick}>
+                <sphereGeometry args={[0.4, 16, 16]} />
+                <meshBasicMaterial transparent opacity={0} />
+            </mesh>
+            <primitive object={clonedScene} scale={1.15} />
+        </group>
+    )
 }
 
 function XiaomiScooter() {
@@ -84,7 +145,7 @@ export const Room = () => {
         '/textures/outdoor.jpg',
         '/textures/supermario.jpg',
         '/textures/logos/gta3poster.jpg',
-        '/textures/poster_gaming.png'
+        '/textures/rdr2.png'
     ])
     const [lightsOn, setLightsOn] = useState(true)
 
